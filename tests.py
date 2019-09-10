@@ -1,20 +1,37 @@
 import unittest
+import numpy as np
 
 from labyrinth import Labyrinth
 
+LABYRINTH_1 = np.array([[1, 1, 0, 1, 0],
+                        [0, 1, 1, 1, 0],
+                        [0, 0, 0, 0, 0]])
 
-class BaseTestLabyrinth(unittest.TestCase):
-    def setUp(self) -> None:
-        self.labyrinth = Labyrinth()
+LABYRINTH_2 = np.array([[1, 0, 0, 0, 0],
+                        [0, 1, 1, 1, 0],
+                        [0, 0, 0, 0, 0]])
 
-    def test_empty_fit(self):
-        self.assertFalse(self.labyrinth.fit())
+LABYRINTH_3 = np.array([[1, 0, 0, 0, 0],
+                        [0, 1, 1, 1, 0],
+                        [0, 0, 0, 1, 0]])
 
-    def test_empty_way(self):
-        self.assertEquals(self.labyrinth.get_min_way(), None)
 
-    def test_empty_len_way(self):
-        self.assertEquals(self.labyrinth.get_len_min_way(), None)
+class TestMinLengthLabyrinth(unittest.TestCase):
+    def test_one_min_way(self):
+        lab = Labyrinth(LABYRINTH_1, start_point=(1, 3), wall=0, hole=1)
+        self.assertEquals(lab.get_len_min_way(), 2)
+
+    def test_no_exit(self):
+        lab = Labyrinth(LABYRINTH_2, start_point=(1, 2), wall=0, hole=1)
+        self.assertEquals(lab.get_len_min_way(), -1)
+
+    def test_one_way(self):
+        lab = Labyrinth(LABYRINTH_3, start_point=(1, 1), wall=0, hole=1)
+        self.assertEquals(lab.get_len_min_way(), 4)
+
+    def test_two_min_way(self):
+        lab = Labyrinth(LABYRINTH_1, start_point=(1, 2), wall=0, hole=1)
+        self.assertEqual(lab.get_len_min_way(), 3)
 
 
 if __name__ == '__main__':

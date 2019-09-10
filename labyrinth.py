@@ -9,11 +9,11 @@ class Labyrinth:
         self.WALL = -1
         self.HOLE = 0
 
-        labyrinth[labyrinth == wall] = self.WALL
-        labyrinth[labyrinth == hole] = self.HOLE
+        self.labyrinth = labyrinth.copy()
+        self.labyrinth[labyrinth == wall] = self.WALL
+        self.labyrinth[labyrinth == hole] = self.HOLE
 
         self.start_point = start_point
-        self.labyrinth = labyrinth
         self.hight = self.labyrinth.shape[0]
         self.wight = self.labyrinth.shape[1]
         self.out_value_wall = wall
@@ -112,11 +112,11 @@ class Labyrinth:
 
 
 if __name__ == '__main__':
-    some_labyrinth = np.array([[ 0,  0, -1,  0, -1],
-                               [-1,  0,  0,  0, -1],
-                               [-1, -1, -1, -1, -1]])
-    lab = Labyrinth(some_labyrinth, start_point=(1, 2), wall=-1, hole=0)
+    some_labyrinth = np.array([[1, 1, 0, 1, 0],
+                               [0, 1, 1, 1, 0],
+                               [0, 0, 0, 0, 0]])
+    lab = Labyrinth(some_labyrinth, start_point=(1, 2), wall=0, hole=1)
     print(lab.labyrinth)
-    print('Min ways: ', lab.get_min_way())
+    #print('Min ways: ', lab.get_min_way())
     print('Min len: ', lab.get_len_min_way())
 
