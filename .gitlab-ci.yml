@@ -1,0 +1,24 @@
+image: "python:3.7"
+
+variables:
+  PYTHON: "python3"
+  FLAKE: "flake8"
+  FILE: "maze.py"
+
+before_script:
+  - pip install -r requirements.txt
+  - python -v
+
+stages:
+  - static_analysis
+  - tests
+
+flake8:
+  stage: static_analysis
+  script:
+    - ${PYTHON} -m ${FLAKE} ${FILE}
+
+unit_tests:
+  stage: tests
+  script:
+    - ${PYTHON} -m -unittest discover -k unit -v
