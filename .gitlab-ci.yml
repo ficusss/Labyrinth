@@ -3,6 +3,9 @@ image: "python:3.6"
 variables:
   PYTHON: "python3"
   FLAKE: "flake8"
+  MYPY: "mypy"
+  PYLINT: "pylint"
+  ISORT: "isort"
   FILE: "labyrinth.py"
   TESTS: "tests.py"
 
@@ -18,8 +21,11 @@ flake8:
   stage: static_analysis
   script:
     - ${PYTHON} -m ${FLAKE} ${FILE}
+    - ${PYTHON} -m ${MYPY} --ignore-missing-imports ${FILE}
+    - ${PYTHON} -m ${PYLINT} ${FILE}
+    - ${PYTHON} -m ${ISORT} ${FILE}
 
 unit_tests:
   stage: tests
   script:
-    - ${PYTHON} -m -unittest ${TESTS}
+    - ${PYTHON} -m -unittest discover -k unit -v

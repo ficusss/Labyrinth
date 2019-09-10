@@ -1,6 +1,6 @@
-import numpy as np
-
 from itertools import compress
+
+import numpy as np
 
 
 class Labyrinth:
