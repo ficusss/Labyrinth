@@ -4,7 +4,8 @@ from itertools import compress
 
 
 class Labyrinth:
-    def __init__(self, labyrinth: np.ndarray, start_point: tuple, wall=0, hole=1):
+    def __init__(self, labyrinth: np.ndarray, start_point: tuple,
+                 wall=0, hole=1):
 
         self.WALL = -1
         self.HOLE = 0
@@ -66,7 +67,7 @@ class Labyrinth:
             next_points = []
             for point in curr_points:
                 adj_points = self._get_adj_points(point)
-                tmp_bool = list(map(lambda p: self._wave_pass(p) and p != self.start_point, adj_points))
+                tmp_bool = list(map(lambda p: self._wave_pass(p), adj_points))
                 good_adj_points = list(compress(adj_points, tmp_bool))
                 next_points.extend(good_adj_points)
                 for p in good_adj_points:
@@ -83,9 +84,13 @@ class Labyrinth:
                 way, curr_point = [exit_point], exit_point
                 while curr_point != self.start_point:
                     adj_points = self._get_adj_points(curr_point)
-                    tmp_bool = list(map(lambda p: self._within_maze(p), adj_points))
+                    tmp_bool = list(map(lambda p: self._within_maze(p),
+                                        adj_points))
                     adj_points = list(compress(adj_points, tmp_bool))
-                    tmp_bool = list(map(lambda p: self.labyrinth[p] == self.labyrinth[curr_point] - 1, adj_points))
+                    cp = curr_point
+                    tmp_bool = list(map(
+                        lambda p: self.labyrinth[p] == self.labyrinth[cp]-1,
+                        adj_points))
                     curr_point = list(compress(adj_points, tmp_bool))[0]
                     way.append(curr_point)
                 ways.append(way[::-1])
@@ -108,7 +113,9 @@ class Labyrinth:
         return 0 <= point[0] < self.hight and 0 <= point[1] < self.wight
 
     def _wave_pass(self, point: tuple) -> bool:
-        return self._within_maze(point) and self.labyrinth[point] == self.HOLE
+        return self._within_maze(point) \
+               and self.labyrinth[point] == self.HOLE \
+               and point != self.start_point
 
 
 if __name__ == '__main__':
@@ -117,6 +124,5 @@ if __name__ == '__main__':
                                [0, 0, 0, 0, 0]])
     lab = Labyrinth(some_labyrinth, start_point=(1, 2), wall=0, hole=1)
     print(lab.labyrinth)
-    #print('Min ways: ', lab.get_min_way())
+    print('Min ways: ', lab.get_min_way())
     print('Min len: ', lab.get_len_min_way())
-

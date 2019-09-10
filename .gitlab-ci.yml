@@ -1,13 +1,14 @@
-image: "python:3.7"
+image: "python:3.6"
 
 variables:
   PYTHON: "python3"
   FLAKE: "flake8"
-  FILE: "maze.py"
+  FILE: "labyrinth.py"
+  TESTS: "tests.py"
 
 before_script:
   - pip install -r requirements.txt
-  - python -v
+  - ${PYTHON} -v
 
 stages:
   - static_analysis
@@ -21,4 +22,4 @@ flake8:
 unit_tests:
   stage: tests
   script:
-    - ${PYTHON} -m -unittest discover -k unit -v
+    - ${PYTHON} -m -unittest ${TESTS}
